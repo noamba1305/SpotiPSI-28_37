@@ -1,12 +1,9 @@
 import { makeStyles } from 'tss-react/mui';
 
 const useStyles = makeStyles()(() => ({
-    appContainer: {
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: '#1D1D1D',
+    body: {
+        width: '100%',
+        height: '100%',
         margin: '0',
         padding: '0',
     }
