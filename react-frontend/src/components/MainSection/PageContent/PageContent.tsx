@@ -1,6 +1,12 @@
 import "./PageContentStyles"
 
 const PageContent = () => {
+import { useState } from "react";
+
+
+const PageContent = () => {
+    
+    const [currentPage, setCurrentPage] = useState<string>("");
 
     return (
         <div>
