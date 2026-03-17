@@ -1,3 +1,6 @@
+import "./PageContentStyles"
+
+const PageContent = () => {
 import { useState } from "react";
 
 
