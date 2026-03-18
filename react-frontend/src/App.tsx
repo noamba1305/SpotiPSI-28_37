@@ -11,31 +11,33 @@ import PlaylistParam from './finalComponents/PlaylistParam.tsx';
 import Playlists from './finalComponents/Playlists.tsx';
 import Songs from './finalComponents/Songs.tsx';
 
-
 function App() {
   const [songs, setSongsList] = useState<Song[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([])
-  const [playlists, setPlaylists] = useState<Playlist[]>([])
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
   const loadSongs = useCallback(async () => {
     const { fetchGet } = createGetRequest('/songs', setIsLoading, (data: Song[]) => {
-      const updatedSongs = data.map((song) => ({ ...song, isFavorite: song.isFavorite ?? false }));
-      setSongsList(updatedSongs);
+      setSongsList(data);
     }, setError);
     await fetchGet();
   }, []);
 
-  const loadFavorites = async () => {
-    const { fetchGet } = createGetRequest('/favorites', setIsLoading, setFavorites, setError);
+  const loadFavorites = useCallback(async () => {
+    const { fetchGet } = createGetRequest('/favorites', setIsLoading, (data: string[]) => {
+      setFavorites(data);
+    }, setError);
     await fetchGet();
-  }
+  }, []);
 
-  const loadPlaylists = async () => {
-    const { fetchGet } = createGetRequest('/playlists', setIsLoading, setPlaylists, setError);
+  const loadPlaylists = useCallback(async () => {
+    const { fetchGet } = createGetRequest('/playlists', setIsLoading, (data: Playlist[]) => {
+      setPlaylists(data);
+    }, setError);
     await fetchGet();
-  }
+  }, []);
 
   const addToFav = async (songId: string) => {
       const { fetchPost } = createPostRequest(songId, "songId", '/favorites/add', setIsLoading, setFavorites, setError);
@@ -59,17 +61,23 @@ function App() {
 
   useEffect(() => {
     void loadSongs();
-  }, [loadSongs]);
+    void loadFavorites();
+    void loadPlaylists();
+  }, [loadSongs, loadFavorites, loadPlaylists]);
 
+  const songsWithFavorites = songs.map(song => ({
+    ...song,
+    isFavorite: favorites.includes(song.id) 
+  }));
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/songs" replace />} />
-        <Route path='/songs' element={<Songs songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
-        <Route path='/playlists' element={<Playlists songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
-        <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
-        <Route path='/favorites' element={<Favorites songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
+        <Route path='/songs' element={<Songs songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} />} />
+        <Route path='/playlists' element={<Playlists songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} />} />
+        <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} />} />
+        <Route path='/favorites' element={<Favorites songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} />} />
         <Route path='/*' element={<Error />} />
       </Routes>
     </Router>

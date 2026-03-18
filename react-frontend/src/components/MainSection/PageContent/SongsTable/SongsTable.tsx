@@ -4,6 +4,9 @@ import useStyles from "./SongsTableStyles";
 
 interface Props {
     songs: Song[];
+    favorites?: string[];
+    addToFav: (songId: string) => Promise<void>;
+    removeFromFav: (songId: string) => Promise<void>;
 }
 
 const SongsTable = (props: Props) => {
@@ -13,7 +16,7 @@ const SongsTable = (props: Props) => {
         <div className={classes.songsTableContainer}>
             <div>
                 {props.songs.map((song) => (
-                    <SongContainer key={song.id} song={song} /> 
+                    <SongContainer key={song.id} song={song} addToFav={props.addToFav} removeFromFav={props.removeFromFav} /> 
                 ))}
             </div>
         </div>
