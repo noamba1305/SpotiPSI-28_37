@@ -1,12 +1,21 @@
-
+import SidebarItem from "./SidebarItem/SidebarItem.tsx";
 import useStyles from "./SidebarStyles.ts";
-import  { Home, LibraryMusic, Favorite } from '@mui/icons-material'
 
-const Sidebar = () => {
-    const classes = useStyles();
+interface Props {
+    currentPage: string;
+    setCurrentPage: (page: string) => void;
+}
+
+const Sidebar = (props: Props) => {
+    const { classes } = useStyles();
 
     return (
         <div className={classes.bar}>
-            <div className={classes.barItems}>כל השירים <Home /></div>
-            <div className={classes.barItems}>פלייליסטים <LibraryMusic /></div>
-            <div className={classes.barItems}>מועדפים <Favorite /></div>
+            <SidebarItem title="Songs" icon="songs" isActive={props.currentPage === 'songs'} func={() => props.setCurrentPage('songs')} />
+            <SidebarItem title="Playlists" icon="playlists" isActive={props.currentPage === 'playlists'} func={() => props.setCurrentPage('playlists')} />
+            <SidebarItem title="Favorites" icon="favorites" isActive={props.currentPage === 'favorites'} func={() => props.setCurrentPage('favorites')} />
+        </div>
+    );
+};
+
+export default Sidebar;

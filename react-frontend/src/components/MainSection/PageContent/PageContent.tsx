@@ -1,18 +1,32 @@
-import "./PageContentStyles"
+import type { Song } from "../../../types/Song.ts";
+import AllSongsPage from "./AllSongsPage/AllSongsPage.tsx";
+import useStyles from "./PageContentStyles"; 
 
-const PageContent = () => {
-import { useState } from "react";
+interface Props {
+    currentPage: string;
+    songs: Song[];
+}
 
+const PageContent = (props: Props) => {
+    const { classes } = useStyles();
 
-const PageContent = () => {
-    
-    const [currentPage, setCurrentPage] = useState<string>("");
+    const changePage = () => {
+        switch (props.currentPage) {
+            case 'songs':
+                return <AllSongsPage songs={props.songs}/>; 
+            case 'playlists':
+                return;
+            case 'favorites':
+                return; 
+            default:
+                return <h1>Couldn't find page!</h1>;
+        }
+    };
 
     return (
-        <div>
-            
+        <div className={classes.pageContentContainer}>
+            {changePage()}
         </div>
-
     )
 }
 
