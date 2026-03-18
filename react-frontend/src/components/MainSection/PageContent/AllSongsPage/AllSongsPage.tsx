@@ -1,6 +1,6 @@
 import type { Song } from "../../../../types/Song";
-import useStyles from "../PageContentStyles";
-import SongContainer from "../SongContainer/SongContainer";
+import useStyles from "../PageContentStyles"; 
+import SongsTable from "../SongsTable/SongsTable";
 
 interface Props {
     songs: Song[];
@@ -12,11 +12,7 @@ const AllSongsPage = (props: Props) => {
     return (
         <div className={classes.pageContentContainer}>
             <h1>רשימת השירים</h1>
-            <div>
-                {props.songs.map((song) => (
-                    <SongContainer key={song.id} song={song} /> 
-                ))}
-            </div>
+            <SongsTable songs={props.songs} />
         </div>
     )
 }
