@@ -1,5 +1,5 @@
-import type { Song } from "../../../../types/Song.ts";
-import useStyles from "./SongContainerStyles";
+import type { Song } from "../../../../../types/Song.ts";
+import useStyles from "./SongContainerStyles.ts";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AddIcon from '@mui/icons-material/Add';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
