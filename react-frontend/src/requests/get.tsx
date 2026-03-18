@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
-
-const useGetRequest = (uml: string, setIsLoading: (value: boolean) => void, setList: (data: any) => void, setError: (msg: string) => void) => {
+const createGetRequest = (uml: string, setIsLoading: (value: boolean) => void, setList: (data: any) => void, setError: (msg: string) => void) => {
     const fetchGet = async () => {
         setIsLoading(true);
         try {
@@ -15,11 +13,7 @@ const useGetRequest = (uml: string, setIsLoading: (value: boolean) => void, setL
         }
     };
 
-    useEffect(() => {
-        fetchGet();
-    }, []);
-
     return { fetchGet }
 }
 
-export default useGetRequest;
+export default createGetRequest;

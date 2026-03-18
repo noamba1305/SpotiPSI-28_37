@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './AppStyles';
 import type { Song } from './types/Song.ts';
-import useGetRequest from './requests/get.tsx';
-import usePostRequest from './requests/post.tsx';
+import createGetRequest from './requests/get.tsx';
+import createPostRequest from './requests/post.tsx';
 import type { Playlist } from './types/Playlist.ts';
 import Error from './finalComponents/Error.tsx';
 import Favorites from './finalComponents/Favorites.tsx';
@@ -19,36 +19,47 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
-  const loadSongs = () => {
-    const { fetchGet } = useGetRequest ('/songs', setIsLoading, setSongsList, setError);
-    const updatedSongs = songs.map(song => ({...song, isFavorite: false}));
-    setSongsList(updatedSongs);
+  const loadSongs = useCallback(async () => {
+    const { fetchGet } = createGetRequest('/songs', setIsLoading, (data: Song[]) => {
+      const updatedSongs = data.map((song) => ({ ...song, isFavorite: song.isFavorite ?? false }));
+      setSongsList(updatedSongs);
+    }, setError);
+    await fetchGet();
+  }, []);
+
+  const loadFavorites = async () => {
+    const { fetchGet } = createGetRequest('/favorites', setIsLoading, setFavorites, setError);
+    await fetchGet();
   }
 
-  const loadFavorites = () => {
-    const { fetchGet } = useGetRequest ('/favorites', setIsLoading, setFavorites, setError);
+  const loadPlaylists = async () => {
+    const { fetchGet } = createGetRequest('/playlists', setIsLoading, setPlaylists, setError);
+    await fetchGet();
   }
 
-  const loadPlaylists = () => {
-    const { fetchGet } = useGetRequest ('/playlists', setIsLoading, setPlaylists, setError);
+  const addToFav = async (songId: string) => {
+      const { fetchPost } = createPostRequest(songId, "songId", '/favorites/add', setIsLoading, setFavorites, setError);
+      await fetchPost();
   }
 
-  const addToFav = (songId: string) => {
-      const { fetchPost } = usePostRequest (songId, "songId", '/favorites/add', setIsLoading, setFavorites, setError);
+  const removeFromFav = async (songId: string) => {
+      const { fetchPost } = createPostRequest(songId, "songId", '/favorites/remove', setIsLoading, setFavorites, setError);
+      await fetchPost();
   }
 
-  const removeFromFav = (songId: string) => {
-      const { fetchPost } = usePostRequest (songId, "songId", '/favorites/remove', setIsLoading, setFavorites, setError);
+  const createPlaylist = async (name: string) => {
+      const { fetchPost } = createPostRequest(name, "name", 'playlists', setIsLoading, setPlaylists, setError);
+      await fetchPost();
   }
 
-  const createPlaylist = (name: string) => {
-      const { fetchPost } = usePostRequest (name, "name", 'playlists', setIsLoading, setPlaylists, setError);
+  const updatePlaylist = async (songId: string) => {
+      const { fetchPost } = createPostRequest(songId, "songId", 'playlists', setIsLoading, setPlaylists, setError);
+      await fetchPost();
   }
 
-  const updatePlaylist = (songId: string) => {
-      const { fetchPost } = usePostRequest (songId, "songId", 'playlists', setIsLoading, setPlaylists, setError);
-  }
-
+  useEffect(() => {
+    void loadSongs();
+  }, [loadSongs]);
 
 
   return (

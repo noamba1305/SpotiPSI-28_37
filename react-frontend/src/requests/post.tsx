@@ -1,4 +1,4 @@
-const usePostRequest = (param:string, jsonBody: string, uml: string, setIsLoading: (value: boolean) => void, setList: (data: any) => void, setError: (msg: string) => void) => {
+const createPostRequest = (param:string, jsonBody: string, uml: string, setIsLoading: (value: boolean) => void, setList: (data: any) => void, setError: (msg: string) => void) => {
     const fetchPost = async () => {
         setIsLoading(true);
         const settings = {
@@ -7,7 +7,7 @@ const usePostRequest = (param:string, jsonBody: string, uml: string, setIsLoadin
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({jsonBody: param})
+            body: JSON.stringify({ [jsonBody]: param })
         };
 
         try {
@@ -25,4 +25,4 @@ const usePostRequest = (param:string, jsonBody: string, uml: string, setIsLoadin
     return { fetchPost }
 }
 
-export default usePostRequest;
+export default createPostRequest;

@@ -3,12 +3,13 @@ import useStyles from '../AppStyles.ts';
 import Header from '../components/Header/Header.tsx';
 import MainSection from '../components/MainSection/MainSection.tsx';
 import Player from '../components/Player/Player.tsx';
-import { BrowserRouter as useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import type { Playlist } from '../types/Playlist.ts';
 
 interface Props {
   songs: Song[];
-  setFavorites: (songs: Song[]) => void;
-  setPlaylist: (songs: Song[]) => void;
+  setFavorites: (songs: string[]) => void;
+  setPlaylists: (songs: Playlist[]) => void;
 };
 
 const PlaylistParam = (prop: Props) => {

@@ -3,6 +3,7 @@ import useStyles from "./SongContainerStyles.ts";
 import AddIcon from '@mui/icons-material/Add';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useState } from "react";
 
 interface Props {
@@ -36,12 +37,12 @@ const SongContainer = (props: Props) => {
     return (
             <div className={classes.songContainer}> 
                 <div className={classes.rightSide}>
-                    <FavoriteBorderIcon onClick={() => {toggleFavorite()}} />
+                    <div onClick={initFavoriteLogo}>{initFavoriteLogo()}</div>
                     <AddIcon />
                 </div>
                 <div className={classes.leftSide}>
                     <span>{`${props.song.name} - ${props.song.artist}`}</span>
-                    {initFavoriteLogo()}
+                    <PlayArrowIcon className={classes.coloredIcon} />
                 </div>
             </div>
     )
