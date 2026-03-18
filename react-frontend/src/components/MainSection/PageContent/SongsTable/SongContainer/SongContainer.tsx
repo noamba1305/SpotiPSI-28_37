@@ -4,10 +4,12 @@ import AddIcon from '@mui/icons-material/Add';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Props {
     song: Song;
+    addToFav: (songId: string) => Promise<void>;
+    removeFromFav: (songId: string) => Promise<void>;
 }
 
 const SongContainer = (props: Props) => {
@@ -15,21 +17,17 @@ const SongContainer = (props: Props) => {
 
     const [isFavorite, setIsFavorite] = useState(props.song.isFavorite);
 
-    const toggleFavorite = () => {
+    useEffect(() => {
+        setIsFavorite(props.song.isFavorite);
+    }, [props.song.isFavorite]);
+
+    const toggleFavorite = async () => {
         if (isFavorite) {
             setIsFavorite(false);
-            // להוסיף קוד מחיקה לשרת
+            await props.removeFromFav(props.song.id);
         } else {
             setIsFavorite(true);
-            // להוסיף קוד בקשה לשרת
-        }
-    };
-
-    const initFavoriteLogo = () => {
-        if (isFavorite) {
-            return <FavoriteIcon className={classes.coloredIcon} onClick={() => {toggleFavorite()}} />
-        } else {
-            return <FavoriteBorderIcon onClick={() => {toggleFavorite()}} />
+            await props.addToFav(props.song.id);
         }
     };
 
@@ -37,7 +35,9 @@ const SongContainer = (props: Props) => {
     return (
             <div className={classes.songContainer}> 
                 <div className={classes.rightSide}>
-                    <div onClick={initFavoriteLogo}>{initFavoriteLogo()}</div>
+                    <div onClick={toggleFavorite}>
+                        {isFavorite ? (<FavoriteIcon className={classes.coloredIcon} />) : (<FavoriteBorderIcon />)}
+                </div>
                     <AddIcon />
                 </div>
                 <div className={classes.leftSide}>

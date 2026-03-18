@@ -6,6 +6,8 @@ interface Props {
     songs: Song[];
     favorites: string[]; 
     setFavorites: (favorites: string[]) => void;
+    addToFav: (songId: string) => Promise<void>;
+    removeFromFav: (songId: string) => Promise<void>;
 }
 
 const AllSongsPage = (props: Props) => {
@@ -14,7 +16,7 @@ const AllSongsPage = (props: Props) => {
     return (
         <div className={classes.pageContentContainer}>
             <h1>רשימת השירים</h1>
-            <SongsTable songs={props.songs} />
+            <SongsTable songs={props.songs} addToFav={props.addToFav} removeFromFav={props.removeFromFav} />
         </div>
     )
 }
