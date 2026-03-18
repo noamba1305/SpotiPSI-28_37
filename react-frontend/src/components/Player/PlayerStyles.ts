@@ -5,7 +5,10 @@ const useStyles = makeStyles()(() => ({
         backgroundColor: '#313131',
         width: '100vw',
         flex: '1',
-        display: 'flex'
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white'
     }
 
 
