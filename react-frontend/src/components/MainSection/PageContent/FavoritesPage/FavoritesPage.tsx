@@ -4,19 +4,19 @@ import SongsTable from "../SongsTable/SongsTable";
 
 interface Props {
     songs: Song[];
-    favorites: string[]; 
+    favorites: string[];
     setFavorites: (favorites: string[]) => void;
 }
 
-const AllSongsPage = (props: Props) => {
+const FavoritesPage = (props: Props) => {
     const { classes } = useStyles();
 
     return (
         <div className={classes.pageContentContainer}>
-            <h1>רשימת השירים</h1>
-            <SongsTable songs={props.songs} />
+            <h1>המועדפים שלי</h1>
+            <SongsTable songs={props.songs.filter(song => props.favorites.includes(song.id))} />
         </div>
     )
 }
 
-export default AllSongsPage;
+export default FavoritesPage;

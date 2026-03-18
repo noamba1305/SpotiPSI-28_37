@@ -9,6 +9,7 @@ import ErrorScreen from './components/Error/ErrorScreen.tsx';
 import type { Song } from './types/Song.ts';
 import useGetRequest from './requests/get.tsx';
 import usePostRequest from './requests/post.tsx';
+import type { Playlist } from './types/Playlist.ts';
 
 const Error: React.FC = () => {
   const { classes } = useStyles();
@@ -105,7 +106,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/songs" replace />} />
-        <Route path='/songs' element={<Songs songs={songs} setFavorites={setFavorites} setPlaylis={setPlaylist} />} />
+        <Route path='/songs' element={<Songs songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
         <Route path='/playlists' element={<Playlists songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
         <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
         <Route path='/favorites' element={<Favorites songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />

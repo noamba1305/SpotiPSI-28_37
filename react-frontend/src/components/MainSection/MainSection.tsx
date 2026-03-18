@@ -4,11 +4,17 @@ import Sidebar from "./Sidebar/Sidebar";
 import PageContent from "./PageContent/PageContent.tsx";
 import useStyles from "./MainSectionStyles";
 import type { Song } from "../../types/Song.ts";
+import type { Playlist } from "../../types/Playlist.ts";
 
 interface Props {
     currentPage: string;
+    currentPlaylistId?: string;
+    favorites?: string[];
+    playlists?: Playlist[];
     param?: string; 
     songs: Song[];
+    setFavorites: (favorites: string[]) => void;
+    setPlaylists: (playlists: Playlist[]) => void;
 }
 
 const MainSection = (props: Props) => {
@@ -20,9 +26,17 @@ const MainSection = (props: Props) => {
     };
 
     return (
-        <div className={classes.mainSectionContainer}>
+<div className={classes.mainSectionContainer}>
             <Sidebar currentPage={props.currentPage} setCurrentPage={setCurrentPage} />
-            <PageContent currentPage={props.currentPage} songs={props.songs} />
+            <PageContent 
+                currentPage={props.currentPage} 
+                songs={props.songs} 
+                currentPlaylistId={props.currentPlaylistId}
+                favorites={props.favorites}
+                setFavorites={props.setFavorites}
+                playlists={props.playlists}
+                setPlaylists={props.setPlaylists}
+            />
         </div>
     )
 }
