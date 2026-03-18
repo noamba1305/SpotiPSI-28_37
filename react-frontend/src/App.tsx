@@ -7,6 +7,8 @@ import MainSection from './components/MainSection/MainSection.tsx';
 import Player from './components/Player/Player.tsx';
 import ErrorScreen from './components/Error/ErrorScreen.tsx';
 import type { Song } from './types/Song.ts';
+import useGetRequest from './requests/get.tsx';
+import usePostRequest from './requests/post.tsx';
 
 const Error: React.FC = () => {
   const { classes } = useStyles();
@@ -17,12 +19,12 @@ const Error: React.FC = () => {
   );
 };
 
-const Songs = ({ songs }: { songs: Song[] }) => {
+const Songs = ({{ songs }: { songs: Song[] }, { setFavorites } : {setFavorites: (songs: Song[]) => void}, { setPlaylists } : {setPlaylists: (songs: Song[]) => void}}) => {
   const { classes } = useStyles();
   return (
     <div className={classes.appContainer}>
       <Header />
-      <MainSection currentPage={'songs'} songs={songs} />
+      <MainSection currentPage={'songs'} songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />
       <Player />
     </div>
   );
@@ -33,7 +35,7 @@ const Playlists = ({ songs }: { songs: Song[] }) => {
   return (
     <div className={classes.appContainer}>
       <Header />
-      <MainSection currentPage={'playlists'} songs={songs} />
+      <MainSection currentPage={'playlists'} songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />
       <Player />
     </div>
   );
@@ -45,7 +47,7 @@ const PlaylistParam: React.FC<{ songs: Song[] }> = ({ songs }) => {
   return (
     <div className={classes.appContainer}>
       <Header />
-      <MainSection currentPage={'playlists'} param={playlistId} songs={songs} />
+      <MainSection currentPage={'playlists'} param={playlistId} songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />
       <Player />
     </div>
   );
@@ -56,7 +58,7 @@ const Favorites: React.FC<{ songs: Song[] }> = ({ songs }) => {
   return (
     <div className={classes.appContainer}>
       <Header />
-      <MainSection currentPage={'favorites'} songs={songs} />
+      <MainSection currentPage={'favorites'} songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />
       <Player />
     </div>
   );
@@ -64,35 +66,49 @@ const Favorites: React.FC<{ songs: Song[] }> = ({ songs }) => {
 
 function App() {
   const [songs, setSongsList] = useState<Song[]>([]);
+  const [favorites, setFavorites] = useState<string[]>([])
+  const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
-  const fetchSongs = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('http://localhost:5001/api/songs');
-      const data = await response.json();
-      setSongsList(data);
-    } catch (error) {
-      setError("something went wrong");
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const loadSongs = () => {
+    const { fetchGet } = useGetRequest ('/songs', setIsLoading, setSongsList, setError)
+  }
 
-  useEffect(() => {
-    fetchSongs();
-  }, []);
+  const loadFavorites = () => {
+    const { fetchGet } = useGetRequest ('/favorites', setIsLoading, setFavorites, setError)
+  }
+
+  const loadPlaylists = () => {
+    const { fetchGet } = useGetRequest ('/playlists', setIsLoading, setPlaylists, setError)
+  }
+
+  const addToFav = (songId: string) => {
+      const { fetchPost } = usePostRequest (songId, "songId", '/favorites/add', setIsLoading, setFavorites, setError)
+  }
+
+  const removeFromFav = (songId: string) => {
+      const { fetchPost } = usePostRequest (songId, "songId", '/favorites/remove', setIsLoading, setFavorites, setError)
+  }
+
+  const createPlaylist = (name: string) => {
+      const { fetchPost } = usePostRequest (name, "name", 'playlists', setIsLoading, setPlaylists, setError)
+  }
+
+  const updatePlaylist = (songId: string) => {
+      const { fetchPost } = usePostRequest (songId, "songId", 'playlists', setIsLoading, setPlaylists, setError)
+  }
+
+
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/songs" replace />} />
-        <Route path='/songs' element={<Songs songs={songs} />} />
-        <Route path='/playlists' element={<Playlists songs={songs} />} />
-        <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songs} />} />
-        <Route path='/favorites' element={<Favorites songs={songs} />} />
+        <Route path='/songs' element={<Songs songs={songs} setFavorites={setFavorites} setPlaylis={setPlaylist} />} />
+        <Route path='/playlists' element={<Playlists songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
+        <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
+        <Route path='/favorites' element={<Favorites songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
         <Route path='/*' element={<Error />} />
       </Routes>
     </Router>
