@@ -7,8 +7,13 @@ import type { Song } from "../../types/Song.ts";
 
 interface Props {
     currentPage: string;
+    currentPlaylistId?: string;
+    favorites?: string[];
+    playlists?: Playlist[];
     param?: string; 
     songs: Song[];
+    setFavorites: (favorites: string[]) => void;
+    setPlaylists: (playlists: Playlist[]) => void;
 }
 
 const MainSection = (props: Props) => {
