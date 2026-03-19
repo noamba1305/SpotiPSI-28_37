@@ -10,6 +10,7 @@ import Favorites from './finalComponents/Favorites.tsx';
 import PlaylistParam from './finalComponents/PlaylistParam.tsx';
 import Playlists from './finalComponents/Playlists.tsx';
 import Songs from './finalComponents/Songs.tsx';
+import { AudioProvider } from './components/AudioPlayer/AudioProvider';
 
 function App() {
   const [songs, setSongsList] = useState<Song[]>([]);
@@ -17,6 +18,7 @@ function App() {
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+
 
   const loadSongs = useCallback(async () => {
     const { fetchGet } = createGetRequest('/songs', setIsLoading, (data: Song[]) => {
@@ -73,16 +75,18 @@ function App() {
   }));
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/songs" replace />} />
-        <Route path='/songs' element={<Songs songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} playlists={playlists} />} />
-        <Route path='/playlists' element={<Playlists songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} playlists={playlists} />} />
-        <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} loadPlaylists={loadPlaylists} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} playlists={playlists} />} />
-        <Route path='/favorites' element={<Favorites songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} playlists={playlists} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} />} />
-        <Route path='/*' element={<Error />} />
-      </Routes>
-    </Router>
+    <AudioProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/songs" replace />} />
+          <Route path='/songs' element={<Songs songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} playlists={playlists} />} />
+          <Route path='/playlists' element={<Playlists songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} playlists={playlists} />} />
+          <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} loadPlaylists={loadPlaylists} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} playlists={playlists} />} />
+          <Route path='/favorites' element={<Favorites songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} playlists={playlists} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} />} />
+          <Route path='/*' element={<Error />} />
+        </Routes>
+      </Router>
+    </AudioProvider>
   );
 }
 
