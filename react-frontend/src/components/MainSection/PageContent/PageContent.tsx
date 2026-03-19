@@ -35,8 +35,7 @@ const PageContent = (props: Props) => {
                     );
                 }
             case 'favorites':
-                return (<FavoritesPage songs={props.songs} favorites={props.favorites || []} setFavorites={props.setFavorites} addToFav={props.addToFav} removeFromFav={props.removeFromFav} updatePlaylist={props.updatePlaylist} playlists={props.playlists || []} />
-                );
+                return (<FavoritesPage songs={props.songs} favorites={props.favorites || []} setFavorites={props.setFavorites} addToFav={props.addToFav} removeFromFav={props.removeFromFav} updatePlaylist={props.updatePlaylist} playlists={props.playlists || []} />);
             default:
                 return <h1>Couldn't find page!</h1>;
         }
