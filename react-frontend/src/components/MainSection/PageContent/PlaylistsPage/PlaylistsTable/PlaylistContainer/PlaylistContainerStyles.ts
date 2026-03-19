@@ -11,6 +11,7 @@ const useStyles = makeStyles()(() => ({
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
+        cursor: 'pointer'
     }
 }));    
 
