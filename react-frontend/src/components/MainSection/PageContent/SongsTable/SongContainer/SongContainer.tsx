@@ -4,35 +4,42 @@ import AddIcon from '@mui/icons-material/Add';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import AddToPlaylist from "../AddToPlaylist/AddToPlaylist.tsx";
+import type { Playlist } from "../../../../../types/Playlist.ts";
 
 interface Props {
     song: Song;
     onPlay: (songs: Song[], id: string) => void;
     songs: Song[];
+    addToFav: (songId: string) => Promise<void>;
+    removeFromFav: (songId: string) => Promise<void>;
+    updatePlaylist: (songId: string, playlistId: string) => Promise<void>;
+    playlists: Playlist[];
 }
 
 const SongContainer = (props: Props) => {
     const { classes } = useStyles();
 
     const [isFavorite, setIsFavorite] = useState(props.song.isFavorite);
+    const [isPlaylistMenuOpen, setIsPlaylistMenuOpen] = useState(false);
 
-    const toggleFavorite = () => {
+    useEffect(() => {
+        setIsFavorite(props.song.isFavorite);
+    }, [props.song.isFavorite]);
+
+    const toggleFavorite = async () => {
         if (isFavorite) {
             setIsFavorite(false);
-            // להוסיף קוד מחיקה לשרת
+            await props.removeFromFav(props.song.id);
         } else {
             setIsFavorite(true);
-            // להוסיף קוד בקשה לשרת
+            await props.addToFav(props.song.id);
         }
     };
 
-    const initFavoriteLogo = () => {
-        if (isFavorite) {
-            return <FavoriteIcon className={classes.coloredIcon} onClick={() => {toggleFavorite()}} />
-        } else {
-            return <FavoriteBorderIcon onClick={() => {toggleFavorite()}} />
-        }
+    const togglePlaylistMenu = () => {
+        setIsPlaylistMenuOpen((prev) => !prev);
     };
 
     const onClickSong = () => {
@@ -42,8 +49,15 @@ const SongContainer = (props: Props) => {
     return (
             <div className={classes.songContainer} > 
                 <div className={classes.rightSide}>
-                    <div onClick={initFavoriteLogo}>{initFavoriteLogo()}</div>
-                    <AddIcon />
+                    <div onClick={toggleFavorite}>
+                        {isFavorite ? (<FavoriteIcon className={classes.coloredIcon} />) : (<FavoriteBorderIcon style={{ cursor: 'pointer'}}/>)}
+                </div>
+                    <div className={classes.addToPlaylistTriggerContainer} onMouseLeave={() => setIsPlaylistMenuOpen(false)}>
+                        <AddIcon className={classes.addIcon} onMouseEnter={togglePlaylistMenu} />
+                        <div className={classes.addToPlaylistStylesContainer} style={{ display: isPlaylistMenuOpen ? 'flex' : 'none' }}>
+                            <AddToPlaylist playlists={props.playlists} song={props.song} updatePlaylist={props.updatePlaylist} />
+                        </div>
+                    </div>
                 </div>
                 <div className={classes.leftSide}>
                     <span>{`${props.song.name} - ${props.song.artist}`}</span>

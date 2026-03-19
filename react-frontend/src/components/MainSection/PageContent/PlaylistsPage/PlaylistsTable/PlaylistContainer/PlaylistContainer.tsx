@@ -4,6 +4,7 @@ import useStyles from "./PlaylistContainerStyles";
 
 interface Props {
     playlist: Playlist;
+    updatePlaylist: (songId: string, playlistId: string) => Promise<void>;
 }
 
 const PlaylistContainer = (props: Props) => {
@@ -17,7 +18,7 @@ const PlaylistContainer = (props: Props) => {
     return (
             <div className={classes.playlistContainer} onClick={() => setCurrentPlaylistPage(props.playlist.id)}> 
                 <h2>{props.playlist.name}</h2>
-                <p>{props.playlist.songIds.length} שירים</p>
+                <p>{props.playlist.songIds.length || 0} שירים</p>
             </div>
     )
 }

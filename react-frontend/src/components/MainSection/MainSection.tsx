@@ -15,6 +15,10 @@ interface Props {
     songs: Song[];
     setFavorites: (favorites: string[]) => void;
     setPlaylists: (playlists: Playlist[]) => void;
+    addToFav: (songId: string) => Promise<void>;
+    removeFromFav: (songId: string) => Promise<void>;
+    createPlaylist: (name: string) => Promise<void>;
+    updatePlaylist: (songId: string, playlistId: string) => Promise<void>;
 }
 
 const MainSection = (props: Props) => {
@@ -36,6 +40,10 @@ const MainSection = (props: Props) => {
                 setFavorites={props.setFavorites}
                 playlists={props.playlists}
                 setPlaylists={props.setPlaylists}
+                addToFav={props.addToFav}
+                removeFromFav={props.removeFromFav}
+                createPlaylist={props.createPlaylist}
+                updatePlaylist={props.updatePlaylist}
             />
         </div>
     )
