@@ -35,7 +35,7 @@ const PlaylistsPageParam = (props: Props) => {
         <div className={classes.playlistsPageParamContainer}>
             <div className={classes.btnAndTitle}>
                 <h1>{selectedPlaylist.name}</h1>
-                <ArrowBackIcon fontSize="large" onClick={goBack} />
+                <ArrowBackIcon fontSize="large" onClick={goBack} style={{cursor: 'pointer'}} />
             </div>
 
             <SongsTable songs={playlistSongs} addToFav={props.addToFav} removeFromFav={props.removeFromFav} updatePlaylist={props.updatePlaylist} playlists={props.playlists || []} />
