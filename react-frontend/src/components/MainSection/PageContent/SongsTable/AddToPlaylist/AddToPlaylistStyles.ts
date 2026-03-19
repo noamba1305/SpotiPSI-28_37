@@ -7,8 +7,6 @@ const useStyles = makeStyles()(() => ({
         justifyContent: 'center',
         backgroundColor: '#383838',
         color: 'white',
-        border: '1px solid #404040',
-        minWidth: '12rem',
     }
 }));    
 
