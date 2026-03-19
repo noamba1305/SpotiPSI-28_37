@@ -6,20 +6,24 @@ interface Props {
     playlists: Playlist[];
     setPlaylists: (playlists: Playlist[]) => void;
     currentPlaylistId?: string;
+    createPlaylist: (name: string) => Promise<void>;
+    updatePlaylist: (songId: string, playlistId: string) => Promise<void>;
 }
 
-const SongsTable = (props: Props) => {
-    const { classes } = useStyles();
 
+
+const PlaylistsTable = (props: Props) => {
+    const { classes } = useStyles();
+    
     return (
         <div className={classes.playlistsTableContainer}>
             <div>
                 {props.playlists.map((playlist) => (
-                    <PlaylistContainer key={playlist.id} playlist={playlist} /> 
+                    <PlaylistContainer key={playlist.id} playlist={playlist} updatePlaylist={props.updatePlaylist} />
                 ))}
             </div>
         </div>
     )
 }
 
-export default SongsTable;
+export default PlaylistsTable;
