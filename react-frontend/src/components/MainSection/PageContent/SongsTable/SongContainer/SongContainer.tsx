@@ -23,6 +23,7 @@ const SongContainer = (props: Props) => {
 
     const [isFavorite, setIsFavorite] = useState(props.song.isFavorite);
     const [isPlaylistMenuOpen, setIsPlaylistMenuOpen] = useState(false);
+    const [isPlaying, setIsPlaying] = useState<boolean | undefined>(props.song.isPlaying);
 
     useEffect(() => {
         setIsFavorite(props.song.isFavorite);
@@ -47,7 +48,7 @@ const SongContainer = (props: Props) => {
     };
 
     return (
-            <div className={classes.songContainer} > 
+            <div className={classes.songContainer} style={{ backgroundColor: isPlaying ? '#5d5c5c' : '' }}> 
                 <div className={classes.rightSide}>
                     <div onClick={toggleFavorite}>
                         {isFavorite ? (<FavoriteIcon className={classes.coloredIcon} />) : (<FavoriteBorderIcon style={{ cursor: 'pointer'}}/>)}

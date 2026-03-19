@@ -18,13 +18,16 @@ const Player = () => {
                 <h3>נגן שירים</h3>
             ) : ( 
                 <>
-                    <h3 onClick={prevSong}><SkipNext /></h3>
-                    <div>
-                        <h2>{currentSong.name}</h2>
-                        <h3>{currentSong.artist}</h3>
-                        <h3 onClick={clickPlayPause}>{currentSong.isPlaying ? <Pause /> : <PlayArrow />}</h3>
+                    <div className={classes.song}>
+                        <h3>{currentSong.name}</h3>
+                        <h4>{currentSong.artist}</h4>
+                        
                     </div>
-                    <h3 onClick={songNow}><SkipNext /></h3>
+                    <div className={classes.icons}>
+                        <h4 onClick={prevSong} className={classes.rev}><SkipNext /></h4>
+                        <h4 onClick={clickPlayPause}>{currentSong.isPlaying ? <Pause /> : <PlayArrow />}</h4>
+                        <h4 onClick={songNow}><SkipNext /></h4>
+                    </div>
                 </>
             )}
         </div>
