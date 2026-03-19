@@ -29,6 +29,25 @@ const useStyles = makeStyles()(() => ({
 
     coloredIcon: {
         color: '#9B59B6',
+        cursor: 'pointer',
+    },
+
+    addToPlaylistStylesContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    addToPlaylistTriggerContainer: {
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    addIcon: {
+        cursor: 'pointer',
     }
 }));    
 

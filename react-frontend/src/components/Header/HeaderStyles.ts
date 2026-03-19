@@ -12,7 +12,7 @@ const useStyles = makeStyles()(() => ({
     },
 
     title: {
-        paddingRight: '50px',
+        paddingRight: '20px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

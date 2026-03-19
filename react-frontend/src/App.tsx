@@ -50,13 +50,15 @@ function App() {
   }
 
   const createPlaylist = async (name: string) => {
-      const { fetchPost } = createPostRequest(name, "name", 'playlists', setIsLoading, setPlaylists, setError);
+      const { fetchPost } = createPostRequest(name, "name", '/playlists', setIsLoading, () => {}, setError);
       await fetchPost();
+      await loadPlaylists();
   }
 
-  const updatePlaylist = async (songId: string) => {
-      const { fetchPost } = createPostRequest(songId, "songId", 'playlists', setIsLoading, setPlaylists, setError);
+  const updatePlaylist = async (songId: string, playlistId: string) => {
+      const { fetchPost } = createPostRequest(songId, "songId", `/playlists/${playlistId}/add`, setIsLoading, () => {}, setError);
       await fetchPost();
+      await loadPlaylists();
   }
 
   useEffect(() => {
@@ -74,10 +76,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/songs" replace />} />
-        <Route path='/songs' element={<Songs songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} />} />
-        <Route path='/playlists' element={<Playlists songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} />} />
-        <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} />} />
-        <Route path='/favorites' element={<Favorites songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} />} />
+        <Route path='/songs' element={<Songs songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} playlists={playlists} />} />
+        <Route path='/playlists' element={<Playlists songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} playlists={playlists} />} />
+        <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} loadPlaylists={loadPlaylists} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} playlists={playlists} />} />
+        <Route path='/favorites' element={<Favorites songs={songsWithFavorites} setFavorites={setFavorites} setPlaylists={setPlaylists} addToFav={addToFav} removeFromFav={removeFromFav} playlists={playlists} createPlaylist={createPlaylist} updatePlaylist={updatePlaylist} />} />
         <Route path='/*' element={<Error />} />
       </Routes>
     </Router>

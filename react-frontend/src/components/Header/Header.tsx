@@ -8,7 +8,7 @@ const Header = () => {
     return (
         <div className={`${classes.headerContainer}`}>
             <div className={`${classes.title}`}>
-                <h2>SpotiPSI</h2>
+                <h2>SpotiPsi</h2>
                 <MusicNoteIcon fontSize="large" />
             </div>
         </div>
