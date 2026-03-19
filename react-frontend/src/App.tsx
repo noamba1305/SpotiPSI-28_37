@@ -10,6 +10,7 @@ import Favorites from './finalComponents/Favorites.tsx';
 import PlaylistParam from './finalComponents/PlaylistParam.tsx';
 import Playlists from './finalComponents/Playlists.tsx';
 import Songs from './finalComponents/Songs.tsx';
+import { AudioProvider } from './components/AudioPlayer/AudioProvider';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
   const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+
 
   const loadSongs = useCallback(async () => {
     const { fetchGet } = createGetRequest('/songs', setIsLoading, (data: Song[]) => {
@@ -59,20 +61,23 @@ function App() {
 
   useEffect(() => {
     void loadSongs();
-  }, [loadSongs]);
+  }, []);
+
 
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/songs" replace />} />
-        <Route path='/songs' element={<Songs songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
-        <Route path='/playlists' element={<Playlists songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
-        <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
-        <Route path='/favorites' element={<Favorites songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
-        <Route path='/*' element={<Error />} />
-      </Routes>
-    </Router>
+    <AudioProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/songs" replace />} />
+          <Route path='/songs' element={<Songs songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
+          <Route path='/playlists' element={<Playlists songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
+          <Route path='/playlists/:playlistId' element={<PlaylistParam songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
+          <Route path='/favorites' element={<Favorites songs={songs} setFavorites={setFavorites} setPlaylists={setPlaylists} />} />
+          <Route path='/*' element={<Error />} />
+        </Routes>
+      </Router>
+    </AudioProvider>
   );
 }
 

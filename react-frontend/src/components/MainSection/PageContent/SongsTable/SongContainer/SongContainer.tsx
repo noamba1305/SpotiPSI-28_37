@@ -8,6 +8,8 @@ import { useState } from "react";
 
 interface Props {
     song: Song;
+    onPlay: (songs: Song[], id: string) => void;
+    songs: Song[];
 }
 
 const SongContainer = (props: Props) => {
@@ -33,16 +35,19 @@ const SongContainer = (props: Props) => {
         }
     };
 
+    const onClickSong = () => {
+        props.onPlay(props.songs, props.song.id);
+    };
 
     return (
-            <div className={classes.songContainer}> 
+            <div className={classes.songContainer} > 
                 <div className={classes.rightSide}>
                     <div onClick={initFavoriteLogo}>{initFavoriteLogo()}</div>
                     <AddIcon />
                 </div>
                 <div className={classes.leftSide}>
                     <span>{`${props.song.name} - ${props.song.artist}`}</span>
-                    <PlayArrowIcon className={classes.coloredIcon} />
+                    <PlayArrowIcon className={classes.coloredIcon} onClick={onClickSong}/>
                 </div>
             </div>
     )
